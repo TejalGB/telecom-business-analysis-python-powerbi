@@ -87,9 +87,3 @@ pip install -r requirements.txt
 
 ### 4. Explore Power BI Dashboard
 * Open `Telecom_Performance_Dashboard.pbix` in **Power BI Desktop** to explore the interactive slicers, drilldowns, and visuals.
-
----
-
-## 👤 Author
-- **GitHub:** [@TejalGB](https://github.com/TejalGB)
-- **Project:** Telecom Business Analysis (Python & Power BI)
