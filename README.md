@@ -1,10 +1,5 @@
 # 📡 Telecom Strategic Performance & Revenue Forecasting Analysis
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
-[![Power BI](https://img.shields.io/badge/Power_BI-Dashboard-F2C811.svg)](https://powerbi.microsoft.com/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-Forecasting-F7931E.svg)](https://scikit-learn.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
 An end-to-end strategic telecom analytics project combining **Python (Data ETL, Exploratory Data Analysis & Linear Regression Forecasting)** and **Microsoft Power BI (Interactive Executive Dashboard & DAX KPIs)** to evaluate competitive operator performance, regional profitability, and long-term revenue growth.
 
 ---
@@ -26,20 +21,20 @@ This project delivers an end-to-end analytical framework to:
 - **Analysis & Modeling:** Python 3.x (Spyder IDE)
 - **Data Manipulation & ETL:** Pandas, NumPy
 - **Data Visualization:** Matplotlib
-- **Machine Learning / Forecasting:** Scikit-learn (`LinearRegression`, $R^2$ Score)
+- **Machine Learning / Forecasting:** Scikit-learn (`LinearRegression`, R² Score)
 - **Business Intelligence & Reporting:** Microsoft Power BI Desktop, DAX (Data Analysis Expressions)
 
 ---
 
 ## 📊 Key Performance Indicators (KPIs)
 
-| KPI Metric | Definition | Business Importance |
+| KPI Metric | Formula / Calculation | Business Importance |
 | :--- | :--- | :--- |
-| **Revenue ($M)** | Total annual gross earnings from telecom operations | Primary top-line growth indicator |
-| **ARPU** | $\frac{\text{Annual Revenue}}{\text{Subscribers}}$ | Measures customer monetization value |
-| **EBITDA Margin (%)** | $\frac{\text{Revenue} - \text{Operating Cost}}{\text{Revenue}} \times 100$ | Measures operational profitability & cost discipline |
-| **Churn Rate (%)** | Percentage of subscribers discontinuing service | Core indicator of customer retention health |
-| **YoY Revenue Growth (%)** | $\frac{\text{Revenue}_t - \text{Revenue}_{t-1}}{\text{Revenue}_{t-1}} \times 100$ | Annual revenue growth velocity |
+| **Revenue ($M)** | Total annual gross earnings from operations | Primary top-line growth indicator |
+| **ARPU** | `Annual Revenue / Total Subscribers` | Measures customer monetization value |
+| **EBITDA Margin (%)** | `((Revenue - Operating Cost) / Revenue) * 100` | Measures operational profitability & cost discipline |
+| **Churn Rate (%)** | `(Subscribers Lost / Total Subscribers) * 100` | Core indicator of customer retention health |
+| **YoY Revenue Growth (%)** | `((Current Year Revenue - Previous Year Revenue) / Previous Year Revenue) * 100` | Annual revenue growth velocity |
 
 ---
 
@@ -51,7 +46,7 @@ This project delivers an end-to-end analytical framework to:
 2. **Regional Profit Dynamics:**
    - The **West** and **East** regions generated the highest cumulative profitability, while the **North** region presented higher subscriber acquisition costs.
 3. **5-Year Growth Trajectory (Linear Regression):**
-   - The predictive model achieved a **strong fit ($R^2 > 98\%$)**, projecting steady top-line growth across all three operators through 2027 based on historical momentum.
+   - The predictive model achieved a **strong fit (R² > 98%)**, projecting steady top-line growth across all three operators through 2027 based on historical momentum.
 
 ---
 
@@ -65,24 +60,6 @@ The interactive Power BI dashboard (`Telecom_Performance_Dashboard.pbix`) provid
 * **Revenue Trend Analysis (2016–2022):** Multi-line comparative trajectory across operators.
 * **Profit by Region:** Bar chart highlighting regional financial contribution.
 * **Subscriber & Margin KPIs:** Interactive cards and breakdown by service tier (Prepaid vs. Postpaid).
-
----
-
-## 📁 Repository Structure
-
-```text
-├── TelecomForecast.py                   # Python pipeline (Data Simulation, ETL, EDA & Forecasting)
-├── Telecom_Performance_Dashboard.pbix   # Interactive Power BI Dashboard
-├── requirements.txt                     # Project dependencies
-├── telecom_data.csv                     # Processed dataset with engineered growth KPIs
-├── telecom_raw_data.csv                 # Baseline simulated telecom dataset
-├── telecom_forecast_data.csv            # 5-Year revenue forecast projections (2023-2027)
-├── Dashboard.png                        # Power BI dashboard screenshot
-├── Revenuetrend.png                     # Python revenue trend visual
-├── ProfitbyRegion.png                   # Python regional profit visual
-├── LICENSE                              # MIT License
-└── README.md                            # Comprehensive project documentation
-```
 
 ---
 
