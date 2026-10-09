@@ -144,10 +144,9 @@ final_columns = [
 ]
 df = df[final_columns]
 
-# Save primary cleaned dataset consumed by Power BI
-df.to_csv("telecom_cleaned_data.csv", index=False)
+# Save canonical processed dataset consumed by Power BI
 df.to_csv("telecom_data.csv", index=False)
-print(f"[OK] ETL Completed: Engineered growth rates and saved 'telecom_data.csv' ({len(df)} rows).")
+print(f"[OK] ETL Completed: Engineered growth rates and saved canonical 'telecom_data.csv' ({len(df)} rows).")
 
 # %% [4] Business Summary & Exploratory Aggregations
 print("\n" + "=" * 55)

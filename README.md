@@ -57,7 +57,7 @@ $$\text{Company (3)} \times \text{Year (7: 2016–2022)} \times \text{Region (4)
 
 ## 📈 Forecasting Methodology & Benchmark Validation
 
-Rather than relying on in-sample regression fit metrics ($R^2$), the forecasting pipeline employs a **time-based holdout validation** framework benchmarked against a **Naive Baseline**:
+Rather than relying on in-sample regression fit metrics (in-sample R²), the forecasting pipeline employs a **time-based holdout validation** framework benchmarked against a **Naive Baseline**:
 
 1. **Training Period (2016–2020):** Historical training baseline (5 years).
 2. **Holdout Test Period (2021–2022):** 2-year out-of-sample test period to evaluate prediction error.
