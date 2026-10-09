@@ -3,7 +3,7 @@
 ==============================================================================
 TELECOM STRATEGIC BUSINESS PERFORMANCE & FORECASTING ANALYSIS
 ==============================================================================
-Environment: Spyder / Python 3.x
+Environment: VS Code / Spyder / Python 3.x
 Methodology: Multi-dimensional synthetic scenario simulation, ETL, KPI analysis,
              and time-based holdout validated revenue trend forecasting.
 ==============================================================================
@@ -31,9 +31,9 @@ service_types = ["Prepaid", "Postpaid"]
 
 # Baseline annual subscriber allocation (Millions) and growth rates by company
 company_profiles = {
-    "Telecom_A": {"base_subs": 14.5, "growth_rate": 0.065, "postpaid_share": 0.45},
-    "Telecom_B": {"base_subs": 18.0, "growth_rate": 0.050, "postpaid_share": 0.35},
-    "Telecom_C": {"base_subs": 12.0, "growth_rate": 0.080, "postpaid_share": 0.30},
+    "Telecom_A": {"base_subs": 14.5, "growth_rate": 0.065, "postpaid_share": 0.45, "market_share": 38.5},
+    "Telecom_B": {"base_subs": 18.0, "growth_rate": 0.050, "postpaid_share": 0.35, "market_share": 34.0},
+    "Telecom_C": {"base_subs": 12.0, "growth_rate": 0.080, "postpaid_share": 0.30, "market_share": 27.5},
 }
 
 # Regional subscriber distribution weights (North, South, East, West)
@@ -57,12 +57,12 @@ for company, profile in company_profiles.items():
                 # Service mix breakdown
                 if service == "Postpaid":
                     subs = regional_subs * profile["postpaid_share"]
-                    # Postpaid: Higher ARPU ($28 - $42/month), Lower Churn (1.5% - 3.5% annualized monthly)
+                    # Postpaid: Higher ARPU ($28 - $42/month), Lower Churn (1.5% - 3.5%)
                     monthly_arpu = np.random.uniform(28.0, 42.0)
                     churn_rate = np.random.uniform(1.5, 3.5)
                 else:  # Prepaid
                     subs = regional_subs * (1.0 - profile["postpaid_share"])
-                    # Prepaid: Lower ARPU ($9 - $18/month), Higher Churn (5.0% - 9.5% annualized monthly)
+                    # Prepaid: Lower ARPU ($9 - $18/month), Higher Churn (5.0% - 9.5%)
                     monthly_arpu = np.random.uniform(9.0, 18.0)
                     churn_rate = np.random.uniform(5.0, 9.5)
                 
@@ -90,15 +90,18 @@ for company, profile in company_profiles.items():
                     round(profit, 2),
                     round(subs, 3),
                     round(churn_rate, 2),
+                    round(arpu_monthly, 2),   # Primary ARPU for Power BI
+                    round(profile["market_share"], 2),
+                    round(ebitda_margin, 2),
                     round(arpu_monthly, 2),
-                    round(arpu_annual, 2),
-                    round(ebitda_margin, 2)
+                    round(arpu_annual, 2)
                 ])
 
 columns = [
     "Year", "Company", "Region", "Service_Type", "Revenue",
     "Operating_Cost", "Profit", "Subscribers_Millions",
-    "Churn_Rate", "Monthly_ARPU", "Annual_ARPU", "EBITDA_Margin_%"
+    "Churn_Rate", "ARPU", "Market_Share_%", "EBITDA_Margin_%",
+    "Monthly_ARPU", "Annual_ARPU"
 ]
 
 df = pd.DataFrame(records, columns=columns)
@@ -126,8 +129,14 @@ df = df.merge(
     how="left"
 )
 
-# Standardize column names for Power BI compatibility
-df["ARPU"] = df["Monthly_ARPU"]
+# Reorder columns to exactly match Power BI expected schema
+final_columns = [
+    "Year", "Company", "Region", "Service_Type", "Revenue",
+    "Operating_Cost", "Profit", "Subscribers_Millions",
+    "Churn_Rate", "ARPU", "Market_Share_%", "EBITDA_Margin_%",
+    "Revenue_Growth_%", "Subscriber_Growth_%", "Monthly_ARPU", "Annual_ARPU"
+]
+df = df[final_columns]
 
 # Save primary cleaned dataset consumed by Power BI
 df.to_csv("telecom_cleaned_data.csv", index=False)
@@ -140,13 +149,6 @@ print("EXECUTIVE BUSINESS SUMMARY (Aggregated Across Segments)")
 print("=" * 55)
 
 # Annual Company Totals
-summary_pivot = pd.pivot_table(
-    df,
-    values=["Revenue", "Profit", "Subscribers_Millions"],
-    index="Year",
-    columns="Company",
-    aggfunc="sum"
-)
 print("\n--- Annual Total Revenue ($ Millions) by Operator ---")
 print(pd.pivot_table(df, values="Revenue", index="Year", columns="Company", aggfunc="sum").round(2))
 
@@ -206,7 +208,6 @@ print("\n" + "=" * 65)
 print("TIME-BASED FORECAST VALIDATION & 5-YEAR PROJECTION")
 print("=" * 65)
 
-# Holdout Split: Train on 2016-2020 (5 years), Test on 2021-2022 (2 years)
 train_years = list(range(2016, 2021))
 test_years = [2021, 2022]
 future_years = np.array(range(2023, 2028)).reshape(-1, 1)
@@ -245,7 +246,6 @@ for company in companies:
     
     full_model = LinearRegression()
     full_model.fit(X_full, y_full)
-    in_sample_r2 = r2_score(y_full, full_model.predict(X_full)) * 100.0
     future_preds = full_model.predict(future_years)
     
     for yr, pred in zip(range(2023, 2028), future_preds):
@@ -262,7 +262,6 @@ forecast_df = pd.DataFrame(forecast_records, columns=[
 ])
 forecast_df.to_csv("telecom_forecast_data.csv", index=False)
 print("\n[OK] 5-Year revenue forecast with holdout validation metrics saved to 'telecom_forecast_data.csv'.")
-print(forecast_df.head(10))
 
 print("\n" + "=" * 75)
 print("Pipeline execution complete! Multi-grain datasets and validated forecasts ready.")
