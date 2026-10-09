@@ -4,8 +4,8 @@
 TELECOM STRATEGIC BUSINESS PERFORMANCE & FORECASTING ANALYSIS
 ==============================================================================
 Environment: Python 3.x
-Methodology: Multi-dimensional synthetic scenario simulation, ETL, KPI analysis,
-             and time-based holdout validated revenue trend forecasting.
+Methodology: Multi-dimensional synthetic scenario simulation with exact regional
+             reconciliation, ETL, KPI analysis, and benchmark-validated forecasting.
 ==============================================================================
 """
 
@@ -16,9 +16,9 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-print("=" * 75)
+print("=" * 80)
 print("Starting Telecom Strategic Performance & Forecasting Pipeline...")
-print("=" * 75)
+print("=" * 80)
 
 # %% [2] Multi-Dimensional Synthetic Scenario Simulation
 # True Grain: Company x Year x Region x Service_Type (3 x 7 x 4 x 2 = 168 rows)
@@ -36,8 +36,8 @@ company_profiles = {
     "Telecom_C": {"base_subs": 12.0, "growth_rate": 0.080, "postpaid_share": 0.30, "market_share": 27.5},
 }
 
-# Regional subscriber distribution weights (North, South, East, West)
-region_weights = {"North": 0.28, "South": 0.24, "East": 0.22, "West": 0.26}
+# Regional baseline distribution weights (North, South, East, West)
+region_base_weights = {"North": 0.28, "South": 0.24, "East": 0.22, "West": 0.26}
 
 records = []
 
@@ -50,8 +50,14 @@ for company, profile in company_profiles.items():
             growth_noise = np.random.uniform(-0.01, 0.02)
             total_subs *= (1.0 + profile["growth_rate"] + growth_noise)
         
-        for region, r_weight in region_weights.items():
-            regional_subs = total_subs * r_weight * np.random.uniform(0.95, 1.05)
+        # 1. Exact Regional Reconciliation: Generate weights and normalize to exactly 100%
+        raw_weights = {r: region_base_weights[r] * np.random.uniform(0.96, 1.04) for r in regions}
+        weight_sum = sum(raw_weights.values())
+        norm_weights = {r: w / weight_sum for r, w in raw_weights.items()}
+        
+        for region in regions:
+            # Regional subscribers reconciled exactly to total_subs
+            regional_subs = total_subs * norm_weights[region]
             
             for service in service_types:
                 # Service mix breakdown
@@ -203,10 +209,10 @@ plt.tight_layout()
 plt.savefig("ProfitbyRegion.png", dpi=300)
 plt.show()
 
-# %% [6] Time-Based Holdout Validation & 5-Year Trend Forecasting
-print("\n" + "=" * 65)
-print("TIME-BASED FORECAST VALIDATION & 5-YEAR PROJECTION")
-print("=" * 65)
+# %% [6] Benchmark-Validated Forecasting & 5-Year Projections
+print("\n" + "=" * 70)
+print("BENCHMARK-VALIDATED FORECASTING & 5-YEAR PROJECTION")
+print("=" * 70)
 
 train_years = list(range(2016, 2021))
 test_years = [2021, 2022]
@@ -214,7 +220,7 @@ future_years = np.array(range(2023, 2028)).reshape(-1, 1)
 
 forecast_records = []
 
-print("\n--- Out-of-Sample Validation Results (Test Holdout: 2021-2022) ---")
+print("\n--- Out-of-Sample Validation vs. Naive Benchmark (Holdout: 2021-2022) ---")
 
 for company in companies:
     comp_totals = df[df["Company"] == company].groupby("Year")["Revenue"].sum().reset_index()
@@ -228,17 +234,23 @@ for company in companies:
     X_test = test_data[["Year"]].values
     y_test = test_data["Revenue"].values
     
-    # Fit model on training set
+    # 1. Naive Benchmark Forecast (Predicts last known training value)
+    naive_pred = y_train[-1]
+    naive_preds = np.full_like(y_test, naive_pred)
+    naive_mae = mean_absolute_error(y_test, naive_preds)
+    
+    # 2. Linear Trend Model
     val_model = LinearRegression()
     val_model.fit(X_train, y_train)
     test_preds = val_model.predict(X_test)
     
-    # Calculate Out-of-Sample Metrics
+    # Evaluation Metrics
     test_mae = mean_absolute_error(y_test, test_preds)
     test_rmse = np.sqrt(mean_squared_error(y_test, test_preds))
     test_mape = np.mean(np.abs((y_test - test_preds) / y_test)) * 100.0
+    error_reduction = ((naive_mae - test_mae) / naive_mae) * 100.0
     
-    print(f"Operator: {company:<10} | Test MAE: ${test_mae:,.2f}M | Test RMSE: ${test_rmse:,.2f}M | Test MAPE: {test_mape:.2f}%")
+    print(f"Operator: {company:<10} | Naive MAE: ${naive_mae:,.2f}M | Linear Model MAE: ${test_mae:,.2f}M | Error Reduction: {error_reduction:.1f}% | Test MAPE: {test_mape:.2f}%")
     
     # Full Historical Fit for Future 5-Year Trend Projection (2023-2027)
     X_full = comp_totals[["Year"]].values
@@ -254,15 +266,16 @@ for company in companies:
             company,
             round(pred, 2),
             round(test_mae, 2),
-            round(test_mape, 2)
+            round(test_mape, 2),
+            round(error_reduction, 1)
         ])
 
 forecast_df = pd.DataFrame(forecast_records, columns=[
-    "Year", "Company", "Forecasted_Revenue", "Holdout_MAE", "Holdout_MAPE_%"
+    "Year", "Company", "Forecasted_Revenue", "Holdout_MAE", "Holdout_MAPE_%", "Error_Reduction_%_vs_Naive"
 ])
 forecast_df.to_csv("telecom_forecast_data.csv", index=False)
-print("\n[OK] 5-Year revenue forecast with holdout validation metrics saved to 'telecom_forecast_data.csv'.")
+print("\n[OK] 5-Year revenue forecast with benchmark validation metrics saved to 'telecom_forecast_data.csv'.")
 
-print("\n" + "=" * 75)
-print("Pipeline execution complete! Multi-grain datasets and validated forecasts ready.")
-print("=" * 75)
+print("\n" + "=" * 80)
+print("Pipeline complete! Regional reconciliation exact & benchmark forecasting verified.")
+print("=" * 80)

@@ -51,18 +51,19 @@ $$\text{Company (3)} \times \text{Year (7: 2016–2022)} \times \text{Region (4)
 ### Realistic Telecom Business Logic Modeled:
 * **Postpaid Segment:** Higher plan value (Monthly ARPU: \$28–\$42/mo), lower churn (1.5%–3.5%), and higher operational contribution.
 * **Prepaid Segment:** High volume, lower plan value (Monthly ARPU: \$9–\$18/mo), higher turnover/churn (5.0%–9.5%).
-* **Regional Distribution:** Weighted across 4 core territories (`North: 28%`, `West: 26%`, `South: 24%`, `East: 22%`).
+* **Exact Regional Reconciliation:** Regional weights are dynamically normalized to sum to exactly 100.0% per company-year across core territories (`North: ~28%`, `West: ~26%`, `South: ~24%`, `East: ~22%`).
 
 ---
 
-## 📈 Forecasting Methodology & Validation
+## 📈 Forecasting Methodology & Benchmark Validation
 
-Rather than relying on in-sample regression fit metrics ($R^2$), the forecasting pipeline employs a **time-based holdout validation** framework:
+Rather than relying on in-sample regression fit metrics ($R^2$), the forecasting pipeline employs a **time-based holdout validation** framework benchmarked against a **Naive Baseline**:
 
 1. **Training Period (2016–2020):** Historical training baseline (5 years).
 2. **Holdout Test Period (2021–2022):** 2-year out-of-sample test period to evaluate prediction error.
-3. **Validation Metrics:** Evaluated using Out-of-Sample **MAE**, **RMSE**, and **MAPE** on the holdout test set to ensure realistic trend reliability.
-4. **5-Year Projection (2023–2027):** Full historical fit used to model baseline trend projections, saved to `telecom_forecast_data.csv`.
+3. **Benchmark Comparison:** Compares the Linear Trend model against a **Naive Baseline** (last observed value) to measure forecast error reduction.
+4. **Validation Metrics:** Evaluated using Out-of-Sample **MAE**, **RMSE**, and **MAPE** on the holdout test set to ensure realistic trend reliability.
+5. **5-Year Projection (2023–2027):** Full historical fit used to model baseline trend projections, saved to `telecom_forecast_data.csv`.
 
 ---
 
