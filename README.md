@@ -21,7 +21,7 @@ This project delivers an end-to-end analytical framework designed to:
 
 ## 🛠️ Tech Stack & Architecture
 
-- **Data Processing & Modeling:** Python 3.x (Spyder IDE)
+- **Data Processing & Modeling:** Python 3.x
 - **Data Engineering & ETL:** Pandas, NumPy
 - **Visual Analytics:** Matplotlib
 - **Predictive Analytics:** Scikit-learn (`LinearRegression`, Time-Based Train/Test Split)
@@ -77,7 +77,7 @@ The Power BI dashboard (`Telecom_Performance_Dashboard.pbix`) ingests the primar
 * **Operator Revenue Trajectory:** Multi-year trend line across competing operators.
 * **Regional Profitability Breakdown:** Bar chart highlighting regional contribution.
 * **Service Tier Composition:** Donut charts illustrating revenue and subscriber distribution by plan type.
-* **Interactive Slicers:** Dynamic filtering by Operator, Region, Service Tier, and Year.
+* **Interactive Slicers:** Modern button/tile slicers filtering by Operator, Region, Service Tier, and Year range.
 
 ---
 
@@ -91,7 +91,7 @@ The Power BI dashboard (`Telecom_Performance_Dashboard.pbix`) ingests the primar
 ├── telecom_cleaned_data.csv             # Cleaned ETL dataset
 ├── telecom_raw_data.csv                 # Raw multi-dimensional simulated data
 ├── telecom_forecast_data.csv            # 5-Year revenue forecast with holdout validation metrics
-├── Dashboard.png                        # Executive dashboard visual preview
+├── Dashboard.png                        # Refreshed executive dashboard preview
 ├── Revenuetrend.png                     # Python exploratory revenue trend chart
 ├── ProfitbyRegion.png                   # Python exploratory regional profit chart
 ├── .gitignore                           # Git ignore configurations
@@ -113,15 +113,10 @@ cd telecom-business-analysis-python-powerbi
 pip install -r requirements.txt
 ```
 
-### 3. Run in Spyder / Terminal
-* **Using Spyder IDE:**
-  1. Open `TelecomForecast.py` in **Spyder**.
-  2. Run the script cell-by-cell using `Shift + Enter` (or `Ctrl + Enter`), or click the **Run File (F5)** button.
-* **Using Terminal:**
-  ```bash
-  python TelecomForecast.py
-  ```
+### 3. Run the Python Pipeline
+```bash
+python TelecomForecast.py
+```
 
-### 4. Open in Power BI Desktop
-1. Open `Telecom_Performance_Dashboard.pbix` in **Power BI Desktop**.
-2. Click **Refresh** on the Home ribbon to sync the latest data from `telecom_data.csv`.
+### 4. Explore Power BI Dashboard
+* Open `Telecom_Performance_Dashboard.pbix` in **Power BI Desktop** to explore the interactive slicers, drilldowns, and visuals.

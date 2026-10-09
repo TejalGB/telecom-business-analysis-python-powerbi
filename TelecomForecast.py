@@ -3,7 +3,7 @@
 ==============================================================================
 TELECOM STRATEGIC BUSINESS PERFORMANCE & FORECASTING ANALYSIS
 ==============================================================================
-Environment: VS Code / Spyder / Python 3.x
+Environment: Python 3.x
 Methodology: Multi-dimensional synthetic scenario simulation, ETL, KPI analysis,
              and time-based holdout validated revenue trend forecasting.
 ==============================================================================
