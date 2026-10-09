@@ -81,25 +81,6 @@ The Power BI dashboard (`Telecom_Performance_Dashboard.pbix`) ingests the primar
 
 ---
 
-## 📁 Repository Structure
-
-```text
-├── TelecomForecast.py                   # Python pipeline (Simulation, ETL, EDA & Validated Forecasting)
-├── Telecom_Performance_Dashboard.pbix   # Power BI Dashboard file (consumes telecom_data.csv)
-├── requirements.txt                     # Project Python dependencies
-├── telecom_data.csv                     # Primary processed dataset consumed by Power BI (168 rows)
-├── telecom_cleaned_data.csv             # Cleaned ETL dataset
-├── telecom_raw_data.csv                 # Raw multi-dimensional simulated data
-├── telecom_forecast_data.csv            # 5-Year revenue forecast with holdout validation metrics
-├── Dashboard.png                        # Refreshed executive dashboard preview
-├── Revenuetrend.png                     # Python exploratory revenue trend chart
-├── ProfitbyRegion.png                   # Python exploratory regional profit chart
-├── .gitignore                           # Git ignore configurations
-└── README.md                            # Comprehensive project documentation
-```
-
----
-
 ## 🚀 How to Run Locally
 
 ### 1. Clone the Repository
